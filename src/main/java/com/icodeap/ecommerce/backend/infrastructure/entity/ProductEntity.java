@@ -1,35 +1,34 @@
-package com.icodeap.ecommerce.backend.infrastructure;
+package com.icodeap.ecommerce.backend.infrastructure.entity;
 
-import com.icodeap.ecommerce.backend.domain.model.UserType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "products")
 @Data
 @NoArgsConstructor
-public class UserEntity {
+public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String username;
-    private String firstName;
-    private String lastName;
-    @Column(unique = true)
-    private String email;
-    private String address;
-    private String cellphone;
-    private String password;
-    @Enumerated(EnumType.STRING)
-    private UserType userType;
+    private String name;
+    private String code;
+    private String description;
+    private String urlImage;
+    private BigDecimal price;
     @CreationTimestamp
     private LocalDateTime dateCreated;
     @UpdateTimestamp
     private LocalDateTime dateUpdated;
+
+    @ManyToOne
+    private UserEntity userEntity;
+    @ManyToOne
+    private CategoryEntity categoryEntity;
 }
