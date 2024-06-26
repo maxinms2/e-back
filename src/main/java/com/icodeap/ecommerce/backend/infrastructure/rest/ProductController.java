@@ -5,11 +5,13 @@ import com.icodeap.ecommerce.backend.domain.model.Product;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("api/v1/admin/products")
@@ -28,7 +30,9 @@ public class ProductController {
             @RequestParam("price")BigDecimal price,
             @RequestParam("urlImage")String urlImage,
             @RequestParam("userId")Integer userId,
-            @RequestParam("categoryId")Integer categoryId){
+            @RequestParam("categoryId")Integer categoryId,
+            @RequestParam(value = "image", required = false)MultipartFile multipartFile
+            ) throws IOException{
     	
         Product product = new Product();
         product.setId(id);
@@ -40,7 +44,7 @@ public class ProductController {
         product.setUserId(userId);
         product.setUrlImage(urlImage);
         log.info("NOmbre producto: {}", product.getName());
-        return  new ResponseEntity<>(productService.save(product), HttpStatus.CREATED);
+        return  new ResponseEntity<>(productService.save(product, multipartFile), HttpStatus.CREATED);
     }
 
     @GetMapping
