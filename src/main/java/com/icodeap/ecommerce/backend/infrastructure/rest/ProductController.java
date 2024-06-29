@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("api/v1/admin/products")
+@RequestMapping("/api/v1/admin/products")
 @Slf4j
 @AllArgsConstructor
 @CrossOrigin(origins="http://localhost:4200")

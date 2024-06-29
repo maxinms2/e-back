@@ -18,4 +18,7 @@ public class UserService {
         return this.iUserRepository.findById(id);
     }
 
+    public User findByEmail(String email){
+        return iUserRepository.findByEmail(email);
+    }
 }
