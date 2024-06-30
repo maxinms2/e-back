@@ -1,6 +1,5 @@
 package com.icodeap.ecommerce.backend.infrastructure.rest;
 
-
 import com.icodeap.ecommerce.backend.domain.model.DataPayment;
 import com.icodeap.ecommerce.backend.domain.model.URLPaypalResponse;
 import com.icodeap.ecommerce.backend.infrastructure.service.PaypalService;
@@ -9,6 +8,7 @@ import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -37,7 +37,7 @@ public class PaypalController {
             );
             for (Links links : payment.getLinks()){
                 if(links.getRel().equals("approval_url")){
-                    return new URLPaypalResponse(links.getHref());
+                    return new URLPaypalResponse( links.getHref());
                 }
             }
         } catch (PayPalRESTException e) {

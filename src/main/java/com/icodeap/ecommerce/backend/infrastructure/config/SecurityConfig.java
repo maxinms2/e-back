@@ -1,6 +1,5 @@
 package com.icodeap.ecommerce.backend.infrastructure.config;
-
-//import com.icodeap.ecommerce.backend.infrastructure.jwt.JWTAuthorizationFilter;
+import com.icodeap.ecommerce.backend.infrastructure.jwt.JWTAuthorizationFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +14,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import com.icodeap.ecommerce.backend.infrastructure.jwt.JWTAuthorizationFilter;
-
 import java.util.Arrays;
 
 @Configuration
@@ -24,62 +21,46 @@ import java.util.Arrays;
 @Slf4j
 public class SecurityConfig {
 
-	private final JWTAuthorizationFilter jwtAuthorizationFilter;
+    private final JWTAuthorizationFilter jwtAuthorizationFilter;
 
-	public SecurityConfig(JWTAuthorizationFilter jwtAuthorizationFilter) {
-		this.jwtAuthorizationFilter = jwtAuthorizationFilter;
-	}
+    public SecurityConfig(JWTAuthorizationFilter jwtAuthorizationFilter) {
+        this.jwtAuthorizationFilter = jwtAuthorizationFilter;
+    }
 
-	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-			throws Exception {
-		return authenticationConfiguration.getAuthenticationManager();
-	}
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests(aut -> aut.requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
-						.requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
-						.requestMatchers("/api/v1/orders/**").hasRole("USER")
-						.requestMatchers("/api/v1/payments/success").permitAll()
-						.requestMatchers("/api/v1/payments/**")
-						.hasRole("USER").requestMatchers("/images/**").permitAll()
-						.requestMatchers("/api/v1/home/**")
-						.permitAll().requestMatchers("/api/v1/security/**").permitAll().anyRequest().authenticated()
-				).addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class) ;
-		return httpSecurity.build();
-	}
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.cors(
+                cors -> cors.configurationSource(
+                        request -> {
+                            CorsConfiguration corsConfiguration = new CorsConfiguration();
+                            corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
+                            corsConfiguration.setAllowedMethods(Arrays.asList("*"));
+                            corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
+                            return  corsConfiguration;
+                        }
+                )).
+                csrf( csrf-> csrf.disable()).authorizeHttpRequests(
+                aut -> aut.requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/orders/**").hasRole("USER")
+                        .requestMatchers("/api/v1/payments/success").permitAll()
+                        .requestMatchers("/api/v1/payments/**").hasRole("USER")
+                        .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/api/v1/home/**").permitAll()
+                        .requestMatchers("/api/v1/security/**").permitAll().anyRequest().authenticated()
+        ).addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class) ;
 
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity.cors(
-//                cors -> cors.configurationSource(
-//                        request -> {
-//                            CorsConfiguration corsConfiguration = new CorsConfiguration();
-//                            corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
-//                            corsConfiguration.setAllowedMethods(Arrays.asList("*"));
-//                            corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
-//                            return  corsConfiguration;
-//                        }
-//                )).
-//                csrf( csrf-> csrf.disable()).authorizeHttpRequests(
-//                aut -> aut.requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
-//                        .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
-//                        .requestMatchers("/api/v1/orders/**").hasRole("USER")
-//                        .requestMatchers("/api/v1/payments/success").permitAll()
-//                        .requestMatchers("/api/v1/payments/**").hasRole("USER")
-//                        .requestMatchers("/images/**").permitAll()
-//                        .requestMatchers("/api/v1/home/**").permitAll()
-//                        .requestMatchers("/api/v1/security/**").permitAll().anyRequest().authenticated()
-//        ).addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class) ;
-//
-//        return httpSecurity.build();
-//    }
+        return httpSecurity.build();
+    }
 
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder (){
+        return new BCryptPasswordEncoder();
+    }
 
 }

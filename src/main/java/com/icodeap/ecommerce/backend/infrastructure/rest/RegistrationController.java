@@ -16,8 +16,7 @@ public class RegistrationController {
     private final RegistrationService registrationService;
     private  final BCryptPasswordEncoder passwordEncoder;
 
-    public RegistrationController(RegistrationService registrationService
-    		, BCryptPasswordEncoder passwordEncoder) {
+    public RegistrationController(RegistrationService registrationService, BCryptPasswordEncoder passwordEncoder) {
         this.registrationService = registrationService;
         this.passwordEncoder = passwordEncoder;
     }

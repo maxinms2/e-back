@@ -19,7 +19,6 @@ public class Order {
         orderProducts = new ArrayList<>();
     }
     public BigDecimal getTotalOrderPrice(){
-        return this.orderProducts.stream().map( ordenProduct -> ordenProduct.getTotalItem() )
-        		.reduce(BigDecimal.ZERO,BigDecimal::add);
+        return this.orderProducts.stream().map( ordenProduct -> ordenProduct.getTotalItem() ).reduce(BigDecimal.ZERO,BigDecimal::add);
     }
 }

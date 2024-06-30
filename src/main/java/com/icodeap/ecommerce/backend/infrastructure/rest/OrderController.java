@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/orders")
-@CrossOrigin(origins="http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 @Slf4j
 public class OrderController {
     private final OrderService orderService;
@@ -20,6 +20,7 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<Order> save(@RequestBody Order order){
+        System.out.println(order.getOrderState());
         if (order.getOrderState().toString().equals(OrderState.CANCELLED.toString()) ){
             order.setOrderState(OrderState.CANCELLED);
         }else{
@@ -49,6 +50,5 @@ public class OrderController {
     public ResponseEntity<Iterable<Order>> findByUserId(@PathVariable("id") Integer userId){
         return ResponseEntity.ok(orderService.findByUserId(userId));
     }
-
 
 }

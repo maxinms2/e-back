@@ -23,7 +23,11 @@ public class ProductService {
             if(multipartFile==null){
                 product.setUrlImage(product.getUrlImage());
             }else{
-                deleteImageIfNotDefault(product);
+                String nameFile = product.getUrlImage().substring(29);
+                log.info("este es el nombre de la imagen: {}", nameFile);
+                if (!nameFile.equals("default.jpg")){
+                    uploadFile.delete(nameFile);
+                }
                 product.setUrlImage(uploadFile.upload(multipartFile));
             }
         }else{
@@ -42,15 +46,11 @@ public class ProductService {
     }
     public void deleteById(Integer id){
         Product product = findById(id);
-        deleteImageIfNotDefault(product);
-        this.iProductRepository.deleteById(id);
-    }
-
-	private void deleteImageIfNotDefault(Product product) {
-		String nameFile = product.getUrlImage().substring(29);
+        String nameFile = product.getUrlImage().substring(29);
         log.info("este es el nombre de la imagen: {}", nameFile);
         if (!nameFile.equals("default.jpg")){
             uploadFile.delete(nameFile);
         }
-	}
+        this.iProductRepository.deleteById(id);
+    }
 }
