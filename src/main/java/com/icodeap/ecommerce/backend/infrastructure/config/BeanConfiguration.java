@@ -5,6 +5,8 @@ import com.icodeap.ecommerce.backend.domain.port.ICategoryRepository;
 import com.icodeap.ecommerce.backend.domain.port.IOrderRepository;
 import com.icodeap.ecommerce.backend.domain.port.IProductRepository;
 import com.icodeap.ecommerce.backend.domain.port.IUserRepository;
+import com.icodeap.ecommerce.backend.infrastructure.service.ParameterService;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,8 +33,8 @@ public class BeanConfiguration {
         return new OrderService(iOrderRepository);
     }
     @Bean
-    public UploadFile uploadFile(){
-        return new UploadFile();
+    public UploadFile uploadFile(ParameterService parameterService){
+        return new UploadFile(parameterService);
     }
 
     @Bean

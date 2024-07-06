@@ -1,6 +1,11 @@
 package com.icodeap.ecommerce.backend.infrastructure.config;
+import com.icodeap.ecommerce.backend.infrastructure.entity.ParameterEntity;
 import com.icodeap.ecommerce.backend.infrastructure.jwt.JWTAuthorizationFilter;
+import com.icodeap.ecommerce.backend.infrastructure.service.ParameterService;
+
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
@@ -22,9 +28,12 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final JWTAuthorizationFilter jwtAuthorizationFilter;
+    
+    private ParameterService service;
 
-    public SecurityConfig(JWTAuthorizationFilter jwtAuthorizationFilter) {
+    public SecurityConfig(JWTAuthorizationFilter jwtAuthorizationFilter,ParameterService service) {
         this.jwtAuthorizationFilter = jwtAuthorizationFilter;
+        this.service=service;
     }
 
     @Bean
@@ -34,11 +43,14 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    	Optional<ParameterEntity> parameter = service.getParameter("connection.origin");
+    	log.info("parameter: "+parameter.get().getValor());
         httpSecurity.cors(
                 cors -> cors.configurationSource(
                         request -> {
                             CorsConfiguration corsConfiguration = new CorsConfiguration();
-                            corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
+                            corsConfiguration.setAllowedOriginPatterns(Arrays.asList("*"));
+                            corsConfiguration.setAllowedOrigins(Arrays.asList(parameter.get().getValor().split(",")));
                             corsConfiguration.setAllowedMethods(Arrays.asList("*"));
                             corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
                             return  corsConfiguration;
@@ -47,6 +59,7 @@ public class SecurityConfig {
                 csrf( csrf-> csrf.disable()).authorizeHttpRequests(
                 aut -> aut.requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/admin/parameters/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/orders/**").hasRole("USER")
                         .requestMatchers("/api/v1/payments/success").permitAll()
                         .requestMatchers("/api/v1/payments/**").hasRole("USER")
