@@ -15,7 +15,7 @@ import com.icodeap.ecommerce.backend.infrastructure.service.ParameterService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/api/v1/parameters")
+@RequestMapping("/api/v1/admin/parameters")
 //@CrossOrigin(origins = "http://localhost:4200")
 @Slf4j
 public class ParameterController {
