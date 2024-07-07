@@ -23,7 +23,10 @@ public class OrderController {
         System.out.println(order.getOrderState());
         if (order.getOrderState().toString().equals(OrderState.CANCELLED.toString()) ){
             order.setOrderState(OrderState.CANCELLED);
-        }else{
+        }else if(order.getOrderState().toString().equals(OrderState.PROGRESS.toString()) ) {
+        	order.setOrderState(OrderState.PROGRESS);
+        }
+        else{
             order.setOrderState(OrderState.CONFIRMED);
         }
 

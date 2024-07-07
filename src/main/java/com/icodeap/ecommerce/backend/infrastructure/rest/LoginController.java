@@ -31,10 +31,17 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JWTClient>  login(@RequestBody UserDTO userDTO){
-        Authentication authentication = authenticationManager.authenticate(
-               new  UsernamePasswordAuthenticationToken( userDTO.username(), userDTO.password())
-        );
+    //public ResponseEntity<JWTClient>  login(@RequestBody UserDTO userDTO){
+    public ResponseEntity<?>  login(@RequestBody UserDTO userDTO){
+    	Authentication authentication=null;
+    	try {
+            authentication = authenticationManager.authenticate(
+                    new  UsernamePasswordAuthenticationToken( userDTO.username(), userDTO.password())
+             );   		
+    	}catch(Exception e) {
+    		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario o contraseña incorrecta");
+    	}
+
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         log.info("Details: {}", SecurityContextHolder.getContext().getAuthentication().getName());
