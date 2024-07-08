@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.icodeap.ecommerce.backend.infrastructure.adapter.ParameterRepository;
 import com.icodeap.ecommerce.backend.infrastructure.entity.ParameterEntity;
 
-@Service
 public class ParameterService {
 	@Autowired
 	private ParameterRepository repository;

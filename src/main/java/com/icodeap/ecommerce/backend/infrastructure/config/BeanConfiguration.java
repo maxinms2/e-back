@@ -54,5 +54,10 @@ public class BeanConfiguration {
     public IMailSenderService mailSender() {
     	return new MailSenderBrevoService();
     }
+    
+    @Bean
+    public ParameterService parameterService() {
+    	return new ParameterService();
+    }
 
 }
