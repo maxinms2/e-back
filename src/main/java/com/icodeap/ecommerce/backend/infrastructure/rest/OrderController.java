@@ -4,6 +4,8 @@ import com.icodeap.ecommerce.backend.application.OrderService;
 import com.icodeap.ecommerce.backend.domain.model.Order;
 import com.icodeap.ecommerce.backend.domain.model.OrderState;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +21,11 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> save(@RequestBody Order order){
+    public ResponseEntity<?> save(@RequestBody Order order){
         System.out.println(order.getOrderState());
+        if(order.getOrderProducts()==null || order.getOrderProducts().isEmpty()){
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Elija productos para procesar su orden.");
+        }
         if (order.getOrderState().toString().equals(OrderState.CANCELLED.toString()) ){
             order.setOrderState(OrderState.CANCELLED);
         }else if(order.getOrderState().toString().equals(OrderState.PROGRESS.toString()) ) {
