@@ -6,7 +6,10 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.icodeap.ecommerce.backend.domain.model.ModeloCategory;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "categories")
@@ -21,4 +24,7 @@ public class CategoryEntity {
     private LocalDateTime dateCreated;
     @UpdateTimestamp
     private LocalDateTime dateUpdated;
+    
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ModeloCategoryEntity> modelos;
 }

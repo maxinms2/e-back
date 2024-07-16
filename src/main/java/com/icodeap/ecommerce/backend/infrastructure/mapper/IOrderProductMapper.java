@@ -15,6 +15,7 @@ public interface IOrderProductMapper {
                     @Mapping(source = "quantity", target = "quantity"),
                     @Mapping(source = "price", target = "price"),
                     @Mapping(source = "productId", target = "productId"),
+                    @Mapping(source = "model", target = "model")
             }
     )
     OrderProduct toOrderProduct(OrderProductEntity orderProductEntity);

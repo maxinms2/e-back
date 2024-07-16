@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses= {CategoryMapper.class})
 public interface ProductMapper {
     @Mappings(
             {
@@ -20,7 +20,7 @@ public interface ProductMapper {
                     @Mapping(source = "dateCreated", target = "dateCreated"),
                     @Mapping(source = "dateUpdated", target = "dateUpdated"),
                     @Mapping(source = "userEntity.id", target = "userId"),
-                    @Mapping(source = "categoryEntity.id", target = "categoryId"  )
+                    @Mapping(source = "categoryEntity", target = "category"  )
 
             }
     )

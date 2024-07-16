@@ -1,5 +1,7 @@
 package com.icodeap.ecommerce.backend.domain.port;
 
+import java.util.List;
+
 import com.icodeap.ecommerce.backend.domain.model.Product;
 
 public interface IProductRepository {
@@ -7,4 +9,5 @@ public interface IProductRepository {
     Iterable<Product> findAll();
     Product findById(Integer id);
     void deleteById(Integer id);
+    Iterable<Product> findByProductsId(List<Integer> idsProducts);
 }

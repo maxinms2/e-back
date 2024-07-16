@@ -17,8 +17,7 @@ public class OrderEntity {
     private Integer id;
     @CreationTimestamp
     private LocalDateTime dateCreated;
-    @Enumerated(value = EnumType.STRING)
-    private OrderState orderState;
+    private Integer orderState;
     @ManyToOne
     private UserEntity userEntity;
     @OneToMany(mappedBy = "orderEntity", cascade = CascadeType.PERSIST)

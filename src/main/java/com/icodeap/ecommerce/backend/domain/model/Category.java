@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -14,5 +15,5 @@ public class Category {
     private String name;
     private LocalDateTime dateCreated;
     private LocalDateTime dateUpdated;
-
+    private List<ModeloCategory> modelos;
 }

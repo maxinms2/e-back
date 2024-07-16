@@ -12,7 +12,7 @@ public class Order {
     private Integer id;
     private LocalDateTime dateCreated;
     private List<OrderProduct> orderProducts;
-    private OrderState orderState;
+    private Integer orderState;
     private Integer userId;
 
     public Order() {

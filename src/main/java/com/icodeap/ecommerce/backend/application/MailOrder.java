@@ -62,10 +62,12 @@ public class MailOrder {
 		sb.append("<h1>"+this.userName+" gracias por tu compra" +"</h1>");
 		sb.append("<h3>En breve nos comunicaremos contigo para dar seguimiento a tu orden</h3>");
 		sb.append("<h3>Contacto al correo edgar.mh.0307@gmail.com o al teléfono 722 443 4791</h3>" );
+		sb.append("<h3>Número de orden: "+order.getId()+"</h3>" );
 		sb.append("<table>");
 		sb.append("        <thead>\r\n"
 				+ "            <tr>\r\n"
 				+ "                <th>Producto</th>\r\n"
+				+ "                <th>Talla</th>\r\n"
 				+ "                <th>Cantidad</th>\r\n"
 				+ "                <th>Precio</th>\r\n"
 				+ "                <th>Subtotal</th>\r\n"
@@ -77,6 +79,7 @@ public class MailOrder {
 			Product product = productRepository.findById(orderProduct.getProductId());
 			sb.append("<tr>");
 			sb.append("<td>"+product.getName()+" "+product.getDescription());
+			sb.append("<td>"+orderProduct.getModel()+"</td>");
 			sb.append("<td>"+orderProduct.getQuantity()+"</td>");
 			sb.append("<td>$ "+decimalFormat.format(orderProduct.getPrice())+"</td>");
 			BigDecimal subtotal=orderProduct.getPrice().multiply(orderProduct.getQuantity());
@@ -85,6 +88,7 @@ public class MailOrder {
 			sb.append("</tr>");			
 		}
 		sb.append("<tr>");
+		sb.append("<td></td>");
 		sb.append("<td></td>");
 		sb.append("<td></td>");
 		sb.append("<td>TOTAL:</td>");

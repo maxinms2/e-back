@@ -1,7 +1,9 @@
 package com.icodeap.ecommerce.backend.infrastructure.rest;
 
 import com.icodeap.ecommerce.backend.application.OrderService;
+import com.icodeap.ecommerce.backend.domain.model.Constants;
 import com.icodeap.ecommerce.backend.domain.model.Order;
+import com.icodeap.ecommerce.backend.domain.model.OrderDTO;
 import com.icodeap.ecommerce.backend.domain.model.OrderState;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,18 +23,12 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody Order order){
-        System.out.println(order.getOrderState());
+    public ResponseEntity<?> save(@RequestBody OrderDTO order){
         if(order.getOrderProducts()==null || order.getOrderProducts().isEmpty()){
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Elija productos para procesar su orden.");
         }
-        if (order.getOrderState().toString().equals(OrderState.CANCELLED.toString()) ){
-            order.setOrderState(OrderState.CANCELLED);
-        }else if(order.getOrderState().toString().equals(OrderState.PROGRESS.toString()) ) {
-        	order.setOrderState(OrderState.PROGRESS);
-        }
-        else{
-            order.setOrderState(OrderState.CONFIRMED);
+        if(!order.getOrderState().toString().equals(OrderState.CONFIRMED.toString())){
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error");
         }
 
         return ResponseEntity.ok(orderService.save(order));
@@ -50,8 +46,8 @@ public class OrderController {
     }
 
     @GetMapping("{variable}")
-    public ResponseEntity<Order> findById(@PathVariable("variable") Integer id){
-        return  ResponseEntity.ok(orderService.findById(id));
+    public ResponseEntity<OrderDTO> findById(@PathVariable("variable") Integer id){
+        return  ResponseEntity.ok(orderService.findByIdDTO(id));
     }
 
     @GetMapping("/by-user/{id}")

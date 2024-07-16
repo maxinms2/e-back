@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses= {ModeloCategoryMapper.class})
 public interface CategoryMapper {
     @Mappings(
             {
@@ -15,6 +15,7 @@ public interface CategoryMapper {
                     @Mapping(source = "name", target = "name"),
                     @Mapping(source = "dateCreated", target = "dateCreated"),
                     @Mapping(source = "dateUpdated", target = "dateUpdated"),
+                    @Mapping(source = "modelos", target = "modelos")
             }
     )
 

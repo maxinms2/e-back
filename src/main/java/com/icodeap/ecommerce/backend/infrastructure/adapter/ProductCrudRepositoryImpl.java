@@ -4,6 +4,9 @@ import com.icodeap.ecommerce.backend.domain.model.Product;
 import com.icodeap.ecommerce.backend.domain.port.IProductRepository;
 import com.icodeap.ecommerce.backend.infrastructure.mapper.ProductMapper;
 import lombok.AllArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -38,4 +41,10 @@ public class ProductCrudRepositoryImpl implements IProductRepository {
         );
         iProductCrudRepository.deleteById(id);
     }
+
+	@Override
+	public Iterable<Product> findByProductsId(List<Integer> idsProducts) {
+
+		return productMapper.toProductList(iProductCrudRepository.findByProductsId(idsProducts));
+	}
 }

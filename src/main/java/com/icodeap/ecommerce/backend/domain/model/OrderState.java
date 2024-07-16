@@ -1,5 +1,5 @@
 package com.icodeap.ecommerce.backend.domain.model;
 
 public enum OrderState {
-    CANCELLED, CONFIRMED, PROGRESS
+    CANCELLED, CONFIRMED, DELIVERED
 }

@@ -20,5 +20,6 @@ public class Product {
     private LocalDateTime dateCreated;
     private LocalDateTime dateUpdated;
     private  Integer userId;
+    private Category category;
     private Integer categoryId;
 }

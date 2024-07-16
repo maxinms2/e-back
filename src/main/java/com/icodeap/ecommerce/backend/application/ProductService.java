@@ -1,6 +1,8 @@
 package com.icodeap.ecommerce.backend.application;
 
+import com.icodeap.ecommerce.backend.domain.model.Category;
 import com.icodeap.ecommerce.backend.domain.model.Product;
+import com.icodeap.ecommerce.backend.domain.port.ICategoryRepository;
 import com.icodeap.ecommerce.backend.domain.port.IProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,10 +14,13 @@ import java.io.IOException;
 public class ProductService {
     private final IProductRepository iProductRepository;
     private final UploadFile uploadFile;
+    private final ICategoryRepository icategoryRepository;
 
-    public ProductService(IProductRepository iProductRepository, UploadFile uploadFile) {
+    public ProductService(IProductRepository iProductRepository, UploadFile uploadFile,
+    		ICategoryRepository icategoryRepository) {
         this.iProductRepository = iProductRepository;
         this.uploadFile = uploadFile;
+        this.icategoryRepository=icategoryRepository;
     }
 
     public Product save(Product product, MultipartFile multipartFile) throws IOException {
@@ -33,7 +38,10 @@ public class ProductService {
         }else{
             product.setUrlImage(uploadFile.upload(multipartFile));
         }
-
+        
+        
+        Category category=icategoryRepository.findById(product.getCategoryId());
+        product.setCategory(category);
         return this.iProductRepository.save(product);
     }
 

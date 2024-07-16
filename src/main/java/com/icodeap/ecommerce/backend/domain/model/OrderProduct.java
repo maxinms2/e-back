@@ -10,6 +10,8 @@ public class OrderProduct {
     private BigDecimal quantity;
     private BigDecimal price;
     private Integer productId;
+    private String model;
+    
 
     public BigDecimal getTotalItem(){
         return this.price.multiply(quantity);

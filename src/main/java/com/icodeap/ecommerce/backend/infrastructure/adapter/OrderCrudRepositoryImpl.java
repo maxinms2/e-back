@@ -38,7 +38,7 @@ public class OrderCrudRepositoryImpl implements IOrderRepository {
 
     @Override
     public Iterable<Order> findAll() {
-        return iOrderMapper.toOrderList(iOrderCrudRepository.findAll());
+        return iOrderMapper.toOrderList(iOrderCrudRepository.findAllByOrderByDateCreatedAsc());
     }
 
     @Override
@@ -57,4 +57,10 @@ public class OrderCrudRepositoryImpl implements IOrderRepository {
         }
 
     }
+
+	@Override
+	public Iterable<Order> findByOrderState(Integer orderState) {
+
+		return iOrderMapper.toOrderList(iOrderCrudRepository.findByOrderStateOrderByDateCreatedAsc(orderState));
+	}
 }

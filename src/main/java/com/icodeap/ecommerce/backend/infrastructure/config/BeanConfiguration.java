@@ -27,13 +27,14 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public ProductService productService(IProductRepository iProductRepository, UploadFile uploadFile){
-        return  new ProductService(iProductRepository, uploadFile);
+    public ProductService productService(IProductRepository iProductRepository, UploadFile uploadFile
+    		, ICategoryRepository icategoryRepository){
+        return  new ProductService(iProductRepository, uploadFile,icategoryRepository);
     }
     @Bean
     public OrderService orderService(IOrderRepository iOrderRepository,
-    		IMailSenderService mailSender,MailOrder mailorder){
-        return new OrderService(iOrderRepository,mailSender,mailorder);
+    		IMailSenderService mailSender,MailOrder mailorder,IProductRepository iProductRepository){
+        return new OrderService(iOrderRepository,mailSender,mailorder,iProductRepository);
     }
     
     @Bean

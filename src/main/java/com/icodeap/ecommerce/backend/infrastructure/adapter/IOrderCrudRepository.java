@@ -15,4 +15,8 @@ public interface IOrderCrudRepository extends CrudRepository<OrderEntity, Intege
     void updateStateById(Integer id, OrderState state);
 
     Iterable<OrderEntity> findByUserEntity(UserEntity userEntity);
+    
+    Iterable<OrderEntity> findAllByOrderByDateCreatedAsc();
+    
+    Iterable<OrderEntity> findByOrderStateOrderByDateCreatedAsc(Integer orderState);
 }

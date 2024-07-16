@@ -15,6 +15,7 @@ public class OrderProductEntity {
     private BigDecimal quantity;
     private BigDecimal price;
     private Integer productId;
+    private String model;
     @ManyToOne
     private OrderEntity orderEntity;
 }
