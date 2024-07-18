@@ -33,8 +33,9 @@ public class BeanConfiguration {
     }
     @Bean
     public OrderService orderService(IOrderRepository iOrderRepository,
-    		IMailSenderService mailSender,MailOrder mailorder,IProductRepository iProductRepository){
-        return new OrderService(iOrderRepository,mailSender,mailorder,iProductRepository);
+    		IMailSenderService mailSender,MailOrder mailorder,IProductRepository iProductRepository,
+    		IUserRepository iuserRepository){
+        return new OrderService(iOrderRepository,mailSender,mailorder,iProductRepository,iuserRepository);
     }
     
     @Bean

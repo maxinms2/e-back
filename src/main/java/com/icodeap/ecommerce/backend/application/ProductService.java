@@ -50,7 +50,9 @@ public class ProductService {
     }
 
     public Product findById(Integer id){
-        return this.iProductRepository.findById(id);
+    	Product product=this.iProductRepository.findById(id);
+    	product.setCategoryId(product.getCategory().getId());
+        return product;
     }
     public void deleteById(Integer id){
         Product product = findById(id);

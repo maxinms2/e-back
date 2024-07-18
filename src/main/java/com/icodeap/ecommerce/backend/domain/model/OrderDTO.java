@@ -13,15 +13,19 @@ public class OrderDTO {
     private List<OrderProductDTO> orderProducts;
     private OrderState orderState;
     private Integer userId;
+    private String userName;
+    private String email;
     
     
 	public OrderDTO(Integer id, LocalDateTime dateCreated, List<OrderProductDTO> orderProducts,
-			OrderState orderState,Integer userId) {
+			OrderState orderState,Integer userId,String userName,String email) {
 		this.id = id;
 		this.dateCreated = dateCreated;
 		this.orderProducts = orderProducts;
 		this.orderState = orderState;
 		this.userId = userId;
+		this.userName=userName;
+		this.email=email;
 	}
 
 

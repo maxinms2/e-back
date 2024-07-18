@@ -6,6 +6,13 @@ import com.icodeap.ecommerce.backend.domain.port.IOrderRepository;
 import com.icodeap.ecommerce.backend.infrastructure.entity.OrderEntity;
 import com.icodeap.ecommerce.backend.infrastructure.entity.UserEntity;
 import com.icodeap.ecommerce.backend.infrastructure.mapper.IOrderMapper;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -62,5 +69,15 @@ public class OrderCrudRepositoryImpl implements IOrderRepository {
 	public Iterable<Order> findByOrderState(Integer orderState) {
 
 		return iOrderMapper.toOrderList(iOrderCrudRepository.findByOrderStateOrderByDateCreatedAsc(orderState));
+	}
+
+	@Override
+	public Page<Order> findByFullNameAndEmail(Integer orderState, String fullName, String email, Pageable pageable) {
+		Page<OrderEntity> page=iOrderCrudRepository.findByFullNameAndEmail(orderState, fullName, email, pageable);
+        List<Order> orders = page.stream()
+                .map(o ->iOrderMapper.toOrder(o))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(orders, page.getPageable(), page.getTotalElements());
 	}
 }
