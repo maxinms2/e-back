@@ -61,5 +61,11 @@ public class BeanConfiguration {
     public ParameterService parameterService() {
     	return new ParameterService();
     }
+    
+    @Bean
+    public ReportProductService reportProduct(IProductRepository iProductRepository, 
+    		ICategoryRepository icategoryRepository) {
+    	return new ReportProductService(iProductRepository, icategoryRepository);
+    }
 
 }
