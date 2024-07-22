@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 
 @Slf4j
@@ -46,8 +49,34 @@ public class ProductService {
     }
 
     public Iterable<Product> findAll(){
-        return this.iProductRepository.findAll();
+    	Random random=new Random();
+    	List<Product> products=(List<Product>)this.iProductRepository.findAll();
+    	List<Product> productsRdm = getProductsOrderRandom(products);
+        return productsRdm;
     }
+    
+    public Iterable<Product> findByCategoryName(Integer category,String name){
+    	List<Product> products=null;
+    	if(category>0) {
+    		products=(List<Product>)this.iProductRepository.findByCategoryName(category, name);
+    	}else {
+    		products=(List<Product>)this.iProductRepository.findByName(name);
+    	}
+    	List<Product> productsRdm = getProductsOrderRandom(products);
+        return productsRdm;
+    }
+
+	private List<Product> getProductsOrderRandom(List<Product> products) {
+		Random random=new Random();
+		List<Product> copyProducts=new ArrayList<>(products);
+    	List<Product> productsRdm=new ArrayList<>();
+    	while(!copyProducts.isEmpty()) {
+    		int rdmIndex = random.nextInt(copyProducts.size());
+    		Product productRdm = copyProducts.remove(rdmIndex);
+    		productsRdm.add(productRdm);
+    	}
+		return productsRdm;
+	}
 
     public Product findById(Integer id){
     	Product product=this.iProductRepository.findById(id);

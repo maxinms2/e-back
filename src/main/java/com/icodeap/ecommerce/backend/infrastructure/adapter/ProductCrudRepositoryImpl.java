@@ -47,4 +47,16 @@ public class ProductCrudRepositoryImpl implements IProductRepository {
 
 		return productMapper.toProductList(iProductCrudRepository.findByProductsId(idsProducts));
 	}
+
+	@Override
+	public Iterable<Product> findByCategoryName(Integer category, String name) {
+		
+		return productMapper.toProductList(iProductCrudRepository.findByCategoryName(category,name));
+	}
+
+	@Override
+	public Iterable<Product> findByName(String name) {
+
+		return productMapper.toProductList(iProductCrudRepository.findByName(name));
+	}
 }
