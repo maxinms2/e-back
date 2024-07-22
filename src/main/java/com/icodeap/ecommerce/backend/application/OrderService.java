@@ -95,10 +95,13 @@ public class OrderService {
 	private void AssignNameDescriptionsProductsToDTOs(Iterable<Product> products,
 			List<OrderProductDTO> orderProductsDTO) {
 		products.forEach(p -> {
-			OrderProductDTO productDTO = orderProductsDTO.stream().filter(dto -> dto.getProductId() == p.getId())
-					.findFirst().get();
-			productDTO.setName(p.getName());
-			productDTO.setDescription(p.getDescription());
+			List<OrderProductDTO> productsDTO = orderProductsDTO.stream()
+					.filter(dto -> dto.getProductId() == p.getId()).toList();
+			productsDTO.forEach(dto->{
+				dto.setName(p.getName());
+				dto.setDescription(p.getDescription());				
+			});
+
 		});
 	}
 

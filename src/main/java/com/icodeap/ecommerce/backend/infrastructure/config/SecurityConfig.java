@@ -67,6 +67,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/payments/**").hasRole("USER")
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/api/v1/home/**").permitAll()
+                        .requestMatchers("/api/v1/counter/**").permitAll()
                         .requestMatchers("/api/v1/security/**").permitAll().anyRequest().authenticated()
         ).addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class) ;
 

@@ -20,4 +20,22 @@ public class ParameterService {
 		return repository.save(parameter);
 	}
 
+	public String saveCounter() {
+		Optional<ParameterEntity> parameter=getParameter("visits.number");
+		if(parameter.isPresent()) {
+			Integer valor=Integer.parseInt(parameter.get().getValor());
+			valor++;
+			parameter.get().setValor(valor.toString());
+			return repository.save(parameter.get()).getValor();
+		}
+		return "";
+	}
+	
+	public String getCounter() {
+		Optional<ParameterEntity> pe=repository.findByClave("visits.number");
+		if(pe.isPresent()) {
+			return pe.get().getValor();
+		}
+		return "";
+	}
 }
