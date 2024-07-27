@@ -99,5 +99,7 @@ public class MailOrder {
 		sb.append("</table>");
 		this.detailOrder=sb.toString();
 	}
+	
+	
 
 }

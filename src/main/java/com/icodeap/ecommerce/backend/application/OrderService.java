@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ import com.icodeap.ecommerce.backend.domain.port.IOrderRepository;
 import com.icodeap.ecommerce.backend.domain.port.IProductRepository;
 import com.icodeap.ecommerce.backend.domain.port.IUserRepository;
 import com.icodeap.ecommerce.backend.domain.utils.ConvertersOrder;
+import com.icodeap.ecommerce.backend.infrastructure.service.ParameterService;
 
 public class OrderService {
 
@@ -32,6 +34,9 @@ public class OrderService {
 	private final IMailSenderService mailSender;
 	private final MailOrder mailOrder;
 	private ConvertersOrder converters;
+
+	@Autowired
+	private ParameterService parameterService;
 
 	public OrderService(IOrderRepository iOrderRepository, IMailSenderService mailSender, MailOrder mailorder,
 			IProductRepository iProductRepository, IUserRepository iUserRepository) {
@@ -47,14 +52,27 @@ public class OrderService {
 		order.setOrderState(OrderState.CONFIRMED);
 		Order orderSave = converters.getOrderFromOrderDTO(order);
 		orderSave = this.iOrderRepository.save(orderSave);
-		mailOrder.setDataOrder(orderSave);
-		MailMessage message = new MailMessage();
-		message.setTo(mailOrder.getUserMail());
-		message.setTitle("Ventas Market Fit");
-		message.setMessage(mailOrder.getDetailOrder());
-		mailSender.sendSimpleMessage(message);
 		order = converters.convertOrderDTOFromOrder(orderSave);
+		mailOrder.setDataOrder(orderSave);
+
+		sendMail();
 		return order;
+	}
+
+	private void sendMail() {
+		Thread thread = new Thread(() -> {
+			MailMessage message = new MailMessage();
+			message.setTo(mailOrder.getUserMail());
+			message.setTitle("Ventas SAGAFITMI");
+			message.setMessage(mailOrder.getDetailOrder());
+			mailSender.sendSimpleMessage(message);
+			message.setTo(parameterService.getParameter("mail.market").get().getValor());
+			mailSender.sendSimpleMessage(message);
+		});
+
+		// Iniciar el hilo
+		thread.start();
+
 	}
 
 	public OrderDTO update(OrderDTO orderDTO) {
@@ -95,11 +113,11 @@ public class OrderService {
 	private void AssignNameDescriptionsProductsToDTOs(Iterable<Product> products,
 			List<OrderProductDTO> orderProductsDTO) {
 		products.forEach(p -> {
-			List<OrderProductDTO> productsDTO = orderProductsDTO.stream()
-					.filter(dto -> dto.getProductId() == p.getId()).toList();
-			productsDTO.forEach(dto->{
+			List<OrderProductDTO> productsDTO = orderProductsDTO.stream().filter(dto -> dto.getProductId() == p.getId())
+					.toList();
+			productsDTO.forEach(dto -> {
 				dto.setName(p.getName());
-				dto.setDescription(p.getDescription());				
+				dto.setDescription(p.getDescription());
 			});
 
 		});
@@ -120,12 +138,13 @@ public class OrderService {
 		List<OrderDTO> ordersDTO = buildOrdersDTOFromOrders(orders);
 		return ordersDTO;
 	}
-	
-	public Page<OrderDTO> findByFullNameAndEmail(OrderState orderState, String fullName, String email, Pageable pageable) {
 
-		Page<Order> orderPage = iOrderRepository.findByFullNameAndEmail(
-				converters.getStatusIntFromEnum(orderState), fullName, email, pageable);
-		List<Order> orders = orderPage.stream().collect(Collectors.toList());	
+	public Page<OrderDTO> findByFullNameAndEmail(OrderState orderState, String fullName, String email,
+			Pageable pageable) {
+
+		Page<Order> orderPage = iOrderRepository.findByFullNameAndEmail(converters.getStatusIntFromEnum(orderState),
+				fullName, email, pageable);
+		List<Order> orders = orderPage.stream().collect(Collectors.toList());
 		List<OrderDTO> ordersDTO = buildOrdersDTOFromOrders(orders);
 
 		return new PageImpl(ordersDTO, orderPage.getPageable(), orderPage.getTotalElements());
@@ -146,7 +165,5 @@ public class OrderService {
 		});
 		return ordersDTO;
 	}
-
-
 
 }
